@@ -5,8 +5,6 @@
 #include "weekend.h"
 
 void championship(){
-    // L'ordre de certaines déclarations a été légèrement modifié,
-    // et les noms de variables ont changé.
     struct races list_races[22] = {
         race1, race2, race3, race4, race5,
         race6, race7, race8, race9, race10,
