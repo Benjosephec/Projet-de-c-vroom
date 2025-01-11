@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include "race.h"
 
-// On a modifié l’ordre de quelques déclarations locales
-// et renommé certaines variables (ex: choice -> user_decision).
-
 void weekend_classic(struct drivers all_drivers[20], int show_delay, int max_lap){
     int initial_cars[20] = {1, 11, 16, 55, 63, 44, 31, 10, 4, 81,
                             77, 24, 14, 18, 20, 27, 22, 3, 23, 2};
