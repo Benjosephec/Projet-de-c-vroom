@@ -3,9 +3,6 @@
 #include <time.h>
 #include "util.h"
 
-// On a juste renommé quelques variables internes,
-// mais l'ordre global des fonctions est le même.
-
 void lap_time_format(int lap_time){
     int min = lap_time / (60 * 1000);
     int s = (lap_time % (60 * 1000)) / 1000;
