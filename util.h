@@ -10,111 +10,100 @@
 // --- TIME ---
 
 int get_car_time(){
-	int MIN_TIME = 25000;
-	int MAX_TIME = 45000;
-
-	int car_time;
-	car_time = rand() % (MAX_TIME - MIN_TIME + 1) + MIN_TIME;
-
-	return car_time;
+    int MIN_TIME = 25000;
+    int MAX_TIME = 45000;
+    return rand() % (MAX_TIME - MIN_TIME + 1) + MIN_TIME;
 }
 
 // --- CAR ---
 
 const int DEFAULT = -1;
-
 struct best_time default_best = {DEFAULT, DEFAULT};
 
 struct car generate_car(int number) {
-	struct car car = {number, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, false};
-	return car;
-};
-
-void swap(struct car * xp, struct car * yp) 
-{ 
-    struct car  temp = *xp; 
-    *xp = *yp; 
-    *yp = temp; 
-} 
-
-void swap_drivers(struct drivers * xp, struct drivers * yp) 
-{ 
-    struct drivers temp = *xp; 
-    *xp = *yp; 
-    *yp = temp; 
-} 
-
-void cars_sort_qualif(struct car arr[], int n) 
-{ 
-    int i, j, min_idx; 
-  
-    for (i = 0; i < n - 1; i++) { 
-        min_idx = i; 
-        for (j = i + 1; j < n; j++) 
-            if (arr[j].bt < arr[min_idx].bt) 
-                min_idx = j; 
-  
-        swap(&arr[min_idx], &arr[i]); 
-    } 
-} 
-
-void cars_sort_race(struct car arr[], int n) 
-{ 
-    int i, j, min_idx; 
-  
-    for (i = 0; i < n - 1; i++) { 
-        min_idx = i; 
-        for (j = i + 1; j < n; j++) 
-            if (arr[j].tt < arr[min_idx].tt) 
-                min_idx = j; 
-  
-        swap(&arr[min_idx], &arr[i]); 
-    } 
-} 
-
-void drivers_sort(struct drivers arr[], int n){
-
-    int i, j, min_idx; 
-  
-    for (i = 0; i < n - 1; i++) { 
-        min_idx = i; 
-        for (j = i + 1; j < n; j++) 
-            if (arr[j].points > arr[min_idx].points) 
-                min_idx = j; 
-  
-        swap_drivers(&arr[min_idx], &arr[i]); 
-    } 
+    struct car new_car = {number, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, false};
+    return new_car;
 }
 
-void run_a_lap(struct car *car, struct best_time *list_best_times) {
-	car->s1 = get_car_time();
-	car->s2 = get_car_time();
-	car->s3 = get_car_time();
+void swap(struct car *xp, struct car *yp){
+    struct car temp = *xp; 
+    *xp = *yp; 
+    *yp = temp; 
+}
 
-	int lap_time = car->s1 + car->s2 + car->s3;
-	car->tt += lap_time;
+void swap_drivers(struct drivers *xp, struct drivers *yp){
+    struct drivers tmp_dv = *xp;
+    *xp = *yp;
+    *yp = tmp_dv;
+}
 
-	if ((car->bt == DEFAULT) || (car->bt > lap_time)) {
-		car->bt = lap_time;
-	}
+void cars_sort_qualif(struct car arr[], int n){
+    int i, j, min_idx;
+    for (i = 0; i < n - 1; i++){
+        min_idx = i;
+        for (j = i + 1; j < n; j++){
+            if (arr[j].bt < arr[min_idx].bt){
+                min_idx = j;
+            }
+        }
+        swap(&arr[min_idx], &arr[i]);
+    }
+}
 
-	if ((list_best_times[0].time == DEFAULT) || (list_best_times[0].time > car->s1)) {
-        list_best_times[0].time = car->s1;
-        list_best_times[0].car_number = car->number;
-	}
+void cars_sort_race(struct car arr[], int n){
+    int i, j, min_idx;
+    for (i = 0; i < n - 1; i++){
+        min_idx = i;
+        for (j = i + 1; j < n; j++){
+            if (arr[j].tt < arr[min_idx].tt){
+                min_idx = j;
+            }
+        }
+        swap(&arr[min_idx], &arr[i]);
+    }
+}
 
-	if ((list_best_times[1].time == DEFAULT) || (list_best_times[1].time > car->s2)) {
-        list_best_times[1].time = car->s2;
-        list_best_times[1].car_number = car->number;
-	}
+void drivers_sort(struct drivers arr[], int n){
+    int i, j, max_idx;
+    for (i = 0; i < n - 1; i++){
+        max_idx = i;
+        for (j = i + 1; j < n; j++){
+            if (arr[j].points > arr[max_idx].points){
+                max_idx = j;
+            }
+        }
+        swap_drivers(&arr[max_idx], &arr[i]);
+    }
+}
 
-	if ((list_best_times[2].time == DEFAULT) || (list_best_times[2].time > car->s3)) {
-        list_best_times[2].time = car->s3;
-        list_best_times[2].car_number = car->number;
-	}
+void run_a_lap(struct car *current_car, struct best_time *list_best_times){
+    current_car->s1 = get_car_time();
+    current_car->s2 = get_car_time();
+    current_car->s3 = get_car_time();
 
-	if ((list_best_times[3].time == DEFAULT) || (list_best_times[3].time > car->bt)) {
-        list_best_times[3].time = car->bt;
-        list_best_times[3].car_number = car->number;
-	}
+    int current_lap_time = current_car->s1 + current_car->s2 + current_car->s3;
+    current_car->tt += current_lap_time;
+
+    if ((current_car->bt == DEFAULT) || (current_car->bt > current_lap_time)) {
+        current_car->bt = current_lap_time;
+    }
+
+    // Mise à jour des meilleurs secteurs
+    if ((list_best_times[0].time == DEFAULT) || (list_best_times[0].time > current_car->s1)) {
+        list_best_times[0].time = current_car->s1;
+        list_best_times[0].car_number = current_car->number;
+    }
+    if ((list_best_times[1].time == DEFAULT) || (list_best_times[1].time > current_car->s2)) {
+        list_best_times[1].time = current_car->s2;
+        list_best_times[1].car_number = current_car->number;
+    }
+    if ((list_best_times[2].time == DEFAULT) || (list_best_times[2].time > current_car->s3)) {
+        list_best_times[2].time = current_car->s3;
+        list_best_times[2].car_number = current_car->number;
+    }
+    // Mise à jour du meilleur tour
+    if ((list_best_times[3].time == DEFAULT) || (list_best_times[3].time > current_car->bt)) {
+        list_best_times[3].time = current_car->bt;
+        list_best_times[3].car_number = current_car->number;
+    }
 }

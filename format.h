@@ -26,19 +26,17 @@ void gap_time_format(int gap_time){
 }
 
 void qualif_time_format(struct car sorted_cars[], struct best_time best_times[], int SIZE){
-    int i;
     printf("\n  Car  |  Lap Time  |   Gap  \n");
     printf("--------------------------------\n");
-    for (i=0; i < SIZE; i++) {
-        struct car car = sorted_cars[i];
+    for (int i = 0; i < SIZE; i++) {
+        struct car tmp_car = sorted_cars[i];
+        int time_gap = 0;
 
-        int gap = 0;
-
-        printf("   %2d", car.number);
-        lap_time_format(car.bt);
-        if (i!= 0) {
-            gap = car.bt - sorted_cars[i-1].bt;
-            gap_time_format(gap);
+        printf("   %2d", tmp_car.number);
+        lap_time_format(tmp_car.bt);
+        if (i != 0) {
+            time_gap = tmp_car.bt - sorted_cars[i-1].bt;
+            gap_time_format(time_gap);
         } else {
             printf("  |  LEADER");
         }
@@ -49,15 +47,14 @@ void qualif_time_format(struct car sorted_cars[], struct best_time best_times[],
     struct best_time best_s3 = best_times[2];
     struct best_time best_bt = best_times[3];
 
-    printf("\nBest Times :\n\n");
+    printf("\nBest Times:\n\n");
     printf("        |    S1    |    S2    |    S3    |    Lap\n");
     printf("------------------------------------------------------\n");
 
-
-    printf("   Car  |    %2d    |    %2d    |    %2d    |    %2d\n", best_s1.car_number, best_s2.car_number, best_s3.car_number, best_bt.car_number);
+    printf("   Car  |    %2d    |    %2d    |    %2d    |    %2d\n",
+            best_s1.car_number, best_s2.car_number, best_s3.car_number, best_bt.car_number);
     printf("------------------------------------------------------\n");
     printf("  Time");
-
     sector_time_format(best_s1.time);
     sector_time_format(best_s2.time);
     sector_time_format(best_s3.time);
@@ -66,22 +63,20 @@ void qualif_time_format(struct car sorted_cars[], struct best_time best_times[],
 }
 
 void race_time_format(struct car sorted_cars[], struct best_time best_times[], int SIZE){
-    int i;
     printf("\n  Car  |   Gap\n");
     printf("------------------\n");
-    for (i=0; i < SIZE; i++) {
-        struct car car = sorted_cars[i];
+    for (int i = 0; i < SIZE; i++) {
+        struct car tmp_car = sorted_cars[i];
 
-        printf("   %2d", car.number);
+        printf("   %2d", tmp_car.number);
 
-        if (car.has_crashed) {
+        if (tmp_car.has_crashed) {
             printf("  |  OUT");
         }
         else {
             if (i != 0) {
-                int gap;
-                gap = car.tt - sorted_cars[i - 1].tt;
-                gap_time_format(gap);
+                int gap_calc = tmp_car.tt - sorted_cars[i - 1].tt;
+                gap_time_format(gap_calc);
             } else {
                 printf("  |  LEADER");
             }
@@ -93,15 +88,14 @@ void race_time_format(struct car sorted_cars[], struct best_time best_times[], i
     struct best_time best_s3 = best_times[2];
     struct best_time best_bt = best_times[3];
 
-    printf("\nBest Times :\n\n");
+    printf("\nBest Times:\n\n");
     printf("        |    S1    |    S2    |    S3    |    Lap\n");
     printf("------------------------------------------------------\n");
 
-
-    printf("   Car  |    %2d    |    %2d    |    %2d    |    %2d\n", best_s1.car_number, best_s2.car_number, best_s3.car_number, best_bt.car_number);
+    printf("   Car  |    %2d    |    %2d    |    %2d    |    %2d\n",
+            best_s1.car_number, best_s2.car_number, best_s3.car_number, best_bt.car_number);
     printf("------------------------------------------------------\n");
     printf("  Time");
-
     sector_time_format(best_s1.time);
     sector_time_format(best_s2.time);
     sector_time_format(best_s3.time);
@@ -114,8 +108,11 @@ void championship_format(struct drivers all_drivers[], int num_drivers){
 
     printf("  Car  |    Driver    |  Points\n");
     printf("---------------------------------\n");
-    for(int i=0; i<num_drivers; i++){
-        printf("   %2d  |  %10s  |    %2d\n", all_drivers[i].number, all_drivers[i].last_name, all_drivers[i].points);
+    for(int i = 0; i < num_drivers; i++){
+        printf("   %2d  |  %10s  |    %2d\n",
+               all_drivers[i].number,
+               all_drivers[i].last_name,
+               all_drivers[i].points);
     }
 }
 
